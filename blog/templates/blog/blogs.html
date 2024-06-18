@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogs!</title>
+</head>
+<body>
+    {% include 'base.html'%}
+    <a href="{% url 'create-blog' %}">Create Blog!</a>
+    <hr>
+    {% for blog in object_list %}
+    <h2>
+        <a href="{% url 'blog' blog.id %}">
+            {{blog.title|slice:":20"}}
+        </a>
+        by {{blog.author}},
+        Comment: {{blog.comment_set.count}}
+    </h2>
+    <p>
+        <a href="{% url 'update-blog' blog.id %}">Update</a>
+        | 
+        <a href="{% url 'delete-blog' blog.id %}">Delete</a>
+    </p>
+    <p>{{blog.body|slice:":100"}}</p>
+    <hr>
+    {% endfor %}
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+<h1>Just a header</h1>
+{% if request.user.is_authenticated %}
+<p>Logged in as {{request.user.username}},</p>
+<form id="logout-form" method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit" style="display: inline;">Logout</button>
+  </form>
+  <p>Want to change your password? <a href="{% url 'password_change' %}">Change Password</a></p>
+
+{% else %}
+<a href="{% url 'login' %}">Login</a>
+<p>Forgot your password? <a href="{% url 'password_change' %}">Rest Password</a></p>
+{% endif %}
