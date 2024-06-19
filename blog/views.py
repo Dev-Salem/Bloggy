@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.db.models.query import QuerySet
 from django.http import HttpRequest
 from django.http.response import HttpResponse
 from django.urls import reverse, reverse_lazy
@@ -22,13 +23,21 @@ class BlogListView(ListView):
     template_name = "blog/blogs.html"
     paginate_by = 3
 
+    def get_queryset(self):
+        try:
+            query = self.request.GET["q"]
+        except:
+            query = ""
+        object_list = super().get_queryset()
+        object_list = Blog.objects.filter(title__icontains=query)
+        return object_list
+
 
 class BlogDeleteView(LoginRequiredMixin, DeleteView):
     model = Blog
     template_name = "blog/delete_blog.html"
     success_url = reverse_lazy("blogs")
     login_url = "login"
-    form_class = CommentForm
 
     def dispatch(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         obj = self.get_object()

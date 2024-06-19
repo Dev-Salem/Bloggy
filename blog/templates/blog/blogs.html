@@ -8,6 +8,9 @@
 <body>
     {% include 'base.html'%}
     <a href="{% url 'create-blog' %}">Create Blog!</a>
+    <form action="">
+        <input type="search" name="q" id="query" value="{{request.GET.q}}">
+    </form>
     <hr>
     {% for blog in object_list %}
     <h2>
@@ -17,11 +20,13 @@
         by {{blog.author}},
         Comment: {{blog.comment_set.count}}
     </h2>
+    {% if blog.author == request.user %}
     <p>
         <a href="{% url 'update-blog' blog.id %}">Update</a>
         | 
         <a href="{% url 'delete-blog' blog.id %}">Delete</a>
     </p>
+    {% endif %}
     <p>{{blog.body|slice:":100"}}</p>
     <hr>
     {% endfor %}
