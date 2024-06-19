@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
 from django.http.response import HttpResponse
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -10,7 +10,9 @@ from django.views.generic import (
     ListView,
     UpdateView,
 )
+from django.views.generic.edit import ModelFormMixin
 
+from .forms import CommentForm
 from .models import Blog, Comment
 
 
@@ -25,6 +27,7 @@ class BlogDeleteView(LoginRequiredMixin, DeleteView):
     template_name = "blog/delete_blog.html"
     success_url = reverse_lazy("blogs")
     login_url = "login"
+    form_class = CommentForm
 
     def dispatch(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         obj = self.get_object()
@@ -63,9 +66,30 @@ class BlogUpdateView(
         return super().dispatch(request, *args, **kwargs)
 
 
-class BlogDetailView(DetailView):
+class BlogDetailView(ModelFormMixin, DetailView):
     model = Blog
     template_name = "blog/single_blog.html"
+    form_class = CommentForm
+
+    def get_success_url(self):
+        return reverse("blog", kwargs={"pk": self.get_object().id})
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.blog = self.get_object()
+        return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["instance"] = None
+        return kwargs
+
+    def post(self, request: HttpRequest, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 
 class CommentCreateView(LoginRequiredMixin, CreateView):

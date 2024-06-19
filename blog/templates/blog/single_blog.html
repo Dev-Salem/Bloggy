@@ -11,6 +11,14 @@
     <p>{{object.body}}</p>
     <hr>
     <h3>Comments</h3>
+    <h4>Add a comment</h4>
+    <form method="POST">
+        {%csrf_token%}
+        {{form.label}}
+        {{form}}
+        <input type="submit" value="Add Comment">
+    </form>
+    <hr>
     {% for comment in blog.comment_set.all %}
         <p>By {{comment.author}}: {{comment.body}}</p>
     {% endfor %}
