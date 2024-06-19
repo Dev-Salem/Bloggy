@@ -4,6 +4,7 @@
         "authtoken",
         "bloggy",
         "corsheaders",
-        "socialaccount"
+        "socialaccount",
+        "viewsets"
     ]
 }

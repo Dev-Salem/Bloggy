@@ -1,12 +1,15 @@
 from django.urls import include, path
+from rest_framework.routers import SimpleRouter
 
-from .views import BlogDetailAPIView, BlogListAPIView
+from .views import BlogViewSet, UserViewSet
 
-urlpatterns = [
-    path("", BlogListAPIView.as_view(), name="blog-list"),
-    path("api-auth/", include("rest_framework.urls")),
-    path("auth/", include("dj_rest_auth.urls")),
-    path("auth/registration/", include("dj_rest_auth.registration.urls")),
-    path("<int:pk>/", BlogDetailAPIView.as_view(), name="blog-detail"),
-    path("accounts/", include("allauth.urls")),
-]
+router = SimpleRouter()
+router.register("accounts", UserViewSet, basename="accounts")
+router.register("", BlogViewSet, basename="api-blogs")
+urlpatterns = router.urls
+print(urlpatterns)
+# urlpatterns = [
+#     path("", BlogListAPIView.as_view(), name="blog-list"),
+
+#     path("accounts/", include("allauth.urls")),
+# ]
