@@ -27,16 +27,24 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "users.apps.UsersConfig",
+    "django.contrib.sites",
     # local
     "blog.apps.BlogConfig",
     "api.apps.ApiConfig",
     # 3rd party
     "rest_framework",
+    "rest_framework.authtoken",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "dj_rest_auth",
+    "dj_rest_auth.registration",
     "corsheaders",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -65,7 +73,12 @@ TEMPLATES = [
         },
     },
 ]
-
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by email
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
 WSGI_APPLICATION = "bloggy.wsgi.application"
 
 
@@ -130,11 +143,16 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
-    ]
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
+    ],
 }
-
-CORS_ORIGIN_WHITELIST = (
-    "http://localhost:3000",
-    "http://localhost:8000",
-)
+REST_AUTH = {
+    "USE_JWT": True,
+    "JWT_AUTH_COOKIE": "token",
+    "JWT_AUTH_REFRESH_COOKIE": "refresh-token",
+}
+CORS_ALLOW_ALL_ORIGINS = True
+SITE_ID = 1
