@@ -20,6 +20,7 @@ from .models import Blog, Comment
 class BlogListView(ListView):
     model = Blog
     template_name = "blog/blogs.html"
+    paginate_by = 3
 
 
 class BlogDeleteView(LoginRequiredMixin, DeleteView):
