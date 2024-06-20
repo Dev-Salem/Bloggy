@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "dj_rest_auth",
     "dj_rest_auth.registration",
     "corsheaders",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
@@ -157,3 +158,4 @@ REST_AUTH = {
 }
 CORS_ALLOW_ALL_ORIGINS = True
 SITE_ID = 1
+REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema"}

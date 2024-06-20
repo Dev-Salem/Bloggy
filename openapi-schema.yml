@@ -1,0 +1,66 @@
+info:
+  description: ''
+  title: ''
+  version: ''
+openapi: 3.0.0
+paths:
+  /api/:
+    get:
+      operationId: api_list
+      tags:
+      - api
+    post:
+      operationId: api_create
+      tags:
+      - api
+  /api/{id}/:
+    delete:
+      operationId: api_delete
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          description: A unique integer value identifying this blog.
+          title: ID
+          type: integer
+      tags:
+      - api
+    get:
+      operationId: api_read
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          description: A unique integer value identifying this blog.
+          title: ID
+          type: integer
+      tags:
+      - api
+    patch:
+      operationId: api_partial_update
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          description: A unique integer value identifying this blog.
+          title: ID
+          type: integer
+      tags:
+      - api
+    put:
+      operationId: api_update
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          description: A unique integer value identifying this blog.
+          title: ID
+          type: integer
+      tags:
+      - api
+servers:
+- url: ''
